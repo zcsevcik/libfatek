@@ -21,16 +21,19 @@ address::address() noexcept
 {
 }
 
-bool address::load(const char* s, address& a) noexcept
+address address::parse(const char* s, bool& success) noexcept
 {
     using namespace detail;
-    a = address{};
+    address a = address{};
 
     auto sym = symbol::from_string(s);
-    if (!sym) return false;
+    if (!sym) {
+        return success=false, a;
+    }
 
-    return dispatch(sym).invoke<bool, loader, char*>
-                               (loader{sym, s}, &a.value[0]);
+    return success=dispatch(sym).invoke<bool, loader, char*>
+                                       (loader{sym, s}, &a.value[0]),
+           a;
 }
 
 const char* address::dump() const noexcept
@@ -71,7 +74,7 @@ static bool is_typeof(const char* s, int n, ...) noexcept
     std::va_list args;
     va_start(args, n);
     while (n--) {
-    	auto symbol_arg = static_cast<symbol::value_type>( va_arg(args, int) );
+        auto symbol_arg = static_cast<symbol::value_type>( va_arg(args, int) );
         result |= (symbol == symbol_arg);
     }
     va_end(args);

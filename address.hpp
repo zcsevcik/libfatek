@@ -20,7 +20,7 @@ private:
 
 public:
     address() noexcept;
-    static bool load(const char*, address&) noexcept;
+    static address parse(const char*, bool&) noexcept;
     const char* dump() const noexcept;
 
 public:

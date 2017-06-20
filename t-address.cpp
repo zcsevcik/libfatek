@@ -35,15 +35,17 @@ TEST(address, default_is_empty) {
 /* ======================================================================= */
 #define test_dump(adr, str, ...)                            \
 TEST(address, adr##_dump) {                                 \
-    address a;                                              \
-    ASSERT_EQ(address::load(#adr, a), true);                \
+    bool success = false;                                   \
+    address a = address::parse(#adr, success);              \
+    ASSERT_EQ(success, true);                               \
     ASSERT_STREQ(str, a.dump());                            \
 }
 
 #define test_props(adr, str, discr, reg16, reg32, X, Y, M, S, T, C, TMR, CTR, HR, DR, FR, ...) \
 TEST(address, adr##_props) {                                \
-    address a;                                              \
-    ASSERT_EQ(address::load(#adr, a), true);                \
+    bool success = false;                                   \
+    address a = address::parse(#adr, success);              \
+    ASSERT_EQ(success, true);                               \
     ASSERT_EQ(discr, a.is_discrete_address());              \
     ASSERT_EQ(reg16, a.is_register_16_address());           \
     ASSERT_EQ(reg32, a.is_register_32_address());           \
@@ -100,12 +102,14 @@ X(test_props)
 #define test_highest_address(adr, max_addr, ...)                \
 TEST(address, adr##max_addr##_is_highest_address)               \
 {                                                               \
-    address a;                                                  \
-    ASSERT_EQ(address::load(#adr #max_addr, a), true);          \
+    bool success = false;                                       \
+    address::parse(#adr #max_addr, success);                    \
+    ASSERT_EQ(success, true);                                   \
                                                                 \
     char buf[16];                                               \
     std::snprintf(buf, sizeof buf, #adr "%u", 8u+max_addr);     \
-    ASSERT_EQ(address::load(buf, a), false);                    \
+    address::parse(buf, success);                               \
+    ASSERT_EQ(success, false);                                  \
 }
 
 #define X(_, ...) \
@@ -143,16 +147,16 @@ X(test_highest_address)
 #undef test_highest_address
 
 /* ======================================================================= */
-#define test_alignment(adr, ...)                    \
-TEST(address, adr##_alignas_8)                      \
-{                                                   \
-    address a;                                      \
-    ASSERT_EQ(address::load(#adr "7", a), false);   \
-    ASSERT_EQ(address::load(#adr "8", a), true);    \
-    ASSERT_EQ(address::load(#adr "9", a), false);   \
-    ASSERT_EQ(address::load(#adr "15", a), false);   \
-    ASSERT_EQ(address::load(#adr "16", a), true);    \
-    ASSERT_EQ(address::load(#adr "17", a), false);   \
+#define test_alignment(adr, ...)                                   \
+TEST(address, adr##_alignas_8)                                     \
+{                                                                  \
+    bool success = false;                                          \
+    address::parse(#adr "7", success);  ASSERT_EQ(success, false); \
+    address::parse(#adr "8", success);  ASSERT_EQ(success, true);  \
+    address::parse(#adr "9", success);  ASSERT_EQ(success, false); \
+    address::parse(#adr "15", success); ASSERT_EQ(success, false); \
+    address::parse(#adr "16", success); ASSERT_EQ(success, true);  \
+    address::parse(#adr "17", success); ASSERT_EQ(success, false); \
 }
 
 #define X(_, ...) \
