@@ -15,13 +15,29 @@ namespace libfatek {
 
 class address final
 {
-private:
-    char value[8];
+public:
+    enum symbol_t {
+        X, WX, DWX,
+        Y, WY, DWY,
+        M, WM, DWM,
+        S, WS, DWS,
+        T, WT, DWT,
+        C, WC, DWC,
+           RT, DRT,
+           RC, DRC,
+            R,  DR,
+            D,  DD,
+            F,  DF,
+    };
+
+    constexpr static auto invalid_symbol = static_cast<symbol_t>(-1);
 
 public:
     address() noexcept;
     static address parse(const char*, bool&) noexcept;
     const char* dump() const noexcept;
+
+    symbol_t symbol() const noexcept;
 
 public:
     bool is_discrete_address() const noexcept;
@@ -39,6 +55,9 @@ public:
     bool is_data_register_hr() const noexcept;
     bool is_data_register_dr() const noexcept;
     bool is_file_register() const noexcept;
+
+private:
+    char value[8];
 };
 
 } /* namespace libfatek */
