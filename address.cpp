@@ -53,17 +53,17 @@ is_address_bytes_occupied(const char* s, int numchar) noexcept
 
 bool address::is_discrete_address() const noexcept
 {
-    return is_address_bytes_occupied(value, 5);
+    return is_address_bytes_occupied(value, detail::dumper::max_length::DISCRETE_SIZE);
 }
 
 bool address::is_register_16_address() const noexcept
 {
-    return is_address_bytes_occupied(value, 6);
+    return is_address_bytes_occupied(value, detail::dumper::max_length::REGISTER_SIZE);
 }
 
 bool address::is_register_32_address() const noexcept
 {
-    return is_address_bytes_occupied(value, 7);
+    return is_address_bytes_occupied(value, detail::dumper::max_length::DOUBLE_REGISTER_SIZE);
 }
 
 /* ======================================================================= */

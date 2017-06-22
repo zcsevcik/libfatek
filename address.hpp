@@ -15,22 +15,33 @@ namespace libfatek {
 
 class address final
 {
+    char value[8];
+
 public:
     enum symbol_t {
+    // X: Input discrete
         X, WX, DWX,
+    // Y: Output relay
         Y, WY, DWY,
+    // M: Internal relay
         M, WM, DWM,
+    // S: Step relay
         S, WS, DWS,
+    // T: Timer discrete
         T, WT, DWT,
+    // C: Counter discrete
         C, WC, DWC,
+    // TMR: Timer register
            RT, DRT,
+    // CTR: Counter register
            RC, DRC,
+    // HR: Data register
             R,  DR,
+    // DR: Data register
             D,  DD,
+    // FR: File register
             F,  DF,
     };
-
-    constexpr static auto invalid_symbol = static_cast<symbol_t>(-1);
 
 public:
     address() noexcept;
@@ -38,6 +49,7 @@ public:
     const char* dump() const noexcept;
 
     symbol_t symbol() const noexcept;
+    constexpr static auto invalid_symbol = static_cast<symbol_t>(-1);
 
 public:
     bool is_discrete_address() const noexcept;
@@ -55,9 +67,6 @@ public:
     bool is_data_register_hr() const noexcept;
     bool is_data_register_dr() const noexcept;
     bool is_file_register() const noexcept;
-
-private:
-    char value[8];
 };
 
 } /* namespace libfatek */

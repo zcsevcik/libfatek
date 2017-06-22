@@ -42,7 +42,7 @@ public:
         return std::snprintf(out, 8, "%s%0*hu", strSym, addrlen, addr);
     }
 
-private:
+public:
     struct symbol final
     {
         constexpr auto X() const noexcept { return "X"; }
@@ -75,36 +75,41 @@ private:
         constexpr auto DF() const noexcept { return "DF"; }
     };
 
+public:
     struct max_length final
     {
-        constexpr auto X() const noexcept { return 5; }
-        constexpr auto WX() const noexcept { return 6; }
-        constexpr auto DWX() const noexcept { return 7; }
-        constexpr auto Y() const noexcept { return 5; }
-        constexpr auto WY() const noexcept { return 6; }
-        constexpr auto DWY() const noexcept { return 7; }
-        constexpr auto M() const noexcept { return 5; }
-        constexpr auto WM() const noexcept { return 6; }
-        constexpr auto DWM() const noexcept { return 7; }
-        constexpr auto S() const noexcept { return 5; }
-        constexpr auto WS() const noexcept { return 6; }
-        constexpr auto DWS() const noexcept { return 7; }
-        constexpr auto T() const noexcept { return 5; }
-        constexpr auto WT() const noexcept { return 6; }
-        constexpr auto DWT() const noexcept { return 7; }
-        constexpr auto C() const noexcept { return 5; }
-        constexpr auto WC() const noexcept { return 6; }
-        constexpr auto DWC() const noexcept { return 7; }
-        constexpr auto RT() const noexcept { return 6; }
-        constexpr auto DRT() const noexcept { return 7; }
-        constexpr auto RC() const noexcept { return 6; }
-        constexpr auto DRC() const noexcept { return 7; }
-        constexpr auto R() const noexcept { return 6; }
-        constexpr auto DR() const noexcept { return 7; }
-        constexpr auto D() const noexcept { return 6; }
-        constexpr auto DD() const noexcept { return 7; }
-        constexpr auto F() const noexcept { return 6; }
-        constexpr auto DF() const noexcept { return 7; }
+        constexpr static int DISCRETE_SIZE = 5;
+        constexpr static int REGISTER_SIZE = 6;
+        constexpr static int DOUBLE_REGISTER_SIZE = 7;
+
+        constexpr auto X() const noexcept { return DISCRETE_SIZE; }
+        constexpr auto WX() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DWX() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto Y() const noexcept { return DISCRETE_SIZE; }
+        constexpr auto WY() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DWY() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto M() const noexcept { return DISCRETE_SIZE; }
+        constexpr auto WM() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DWM() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto S() const noexcept { return DISCRETE_SIZE; }
+        constexpr auto WS() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DWS() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto T() const noexcept { return DISCRETE_SIZE; }
+        constexpr auto WT() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DWT() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto C() const noexcept { return DISCRETE_SIZE; }
+        constexpr auto WC() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DWC() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto RT() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DRT() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto RC() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DRC() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto R() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DR() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto D() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DD() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr auto F() const noexcept { return REGISTER_SIZE; }
+        constexpr auto DF() const noexcept { return DOUBLE_REGISTER_SIZE; }
     };
 };
 
