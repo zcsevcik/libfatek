@@ -18,7 +18,7 @@ namespace zcsevcik {
 namespace libfatek {
 namespace detail {
 
-template<typename R, typename... Args>
+template<typename R, class T, typename... Args>
 class dispatcher final
 {
     std::function<R(Args...)> invoke;
@@ -29,41 +29,40 @@ public:
     }
 
 public:
-    template<typename F>
-    dispatcher(address::symbol_t tag, F&& f)
+    dispatcher(address::symbol_t tag)
       : invoke( )
     {
         switch (tag)
         {
         default:           assert(false); break;
-        case address::X:   invoke = std::bind(&F::X, std::forward<F>(f)); break;
-        case address::WX:  invoke = std::bind(&F::WX, std::forward<F>(f)); break;
-        case address::DWX: invoke = std::bind(&F::DWX, std::forward<F>(f)); break;
-        case address::Y:   invoke = std::bind(&F::Y, std::forward<F>(f)); break;
-        case address::WY:  invoke = std::bind(&F::WY, std::forward<F>(f)); break;
-        case address::DWY: invoke = std::bind(&F::DWY, std::forward<F>(f)); break;
-        case address::M:   invoke = std::bind(&F::M, std::forward<F>(f)); break;
-        case address::WM:  invoke = std::bind(&F::WM, std::forward<F>(f)); break;
-        case address::DWM: invoke = std::bind(&F::DWM, std::forward<F>(f)); break;
-        case address::S:   invoke = std::bind(&F::S, std::forward<F>(f)); break;
-        case address::WS:  invoke = std::bind(&F::WS, std::forward<F>(f)); break;
-        case address::DWS: invoke = std::bind(&F::DWS, std::forward<F>(f)); break;
-        case address::T:   invoke = std::bind(&F::T, std::forward<F>(f)); break;
-        case address::WT:  invoke = std::bind(&F::WT, std::forward<F>(f)); break;
-        case address::DWT: invoke = std::bind(&F::DWT, std::forward<F>(f)); break;
-        case address::C:   invoke = std::bind(&F::C, std::forward<F>(f)); break;
-        case address::WC:  invoke = std::bind(&F::WC, std::forward<F>(f)); break;
-        case address::DWC: invoke = std::bind(&F::DWC, std::forward<F>(f)); break;
-        case address::RT:  invoke = std::bind(&F::RT, std::forward<F>(f)); break;
-        case address::DRT: invoke = std::bind(&F::DRT, std::forward<F>(f)); break;
-        case address::RC:  invoke = std::bind(&F::RC, std::forward<F>(f)); break;
-        case address::DRC: invoke = std::bind(&F::DRC, std::forward<F>(f)); break;
-        case address::R:   invoke = std::bind(&F::R, std::forward<F>(f)); break;
-        case address::DR:  invoke = std::bind(&F::DR, std::forward<F>(f)); break;
-        case address::D:   invoke = std::bind(&F::D, std::forward<F>(f)); break;
-        case address::DD:  invoke = std::bind(&F::DD, std::forward<F>(f)); break;
-        case address::F:   invoke = std::bind(&F::F, std::forward<F>(f)); break;
-        case address::DF:  invoke = std::bind(&F::DF, std::forward<F>(f)); break;
+        case address::X:   invoke = &T::X; break;
+        case address::WX:  invoke = &T::WX; break;
+        case address::DWX: invoke = &T::DWX; break;
+        case address::Y:   invoke = &T::Y; break;
+        case address::WY:  invoke = &T::WY; break;
+        case address::DWY: invoke = &T::DWY; break;
+        case address::M:   invoke = &T::M; break;
+        case address::WM:  invoke = &T::WM; break;
+        case address::DWM: invoke = &T::DWM; break;
+        case address::S:   invoke = &T::S; break;
+        case address::WS:  invoke = &T::WS; break;
+        case address::DWS: invoke = &T::DWS; break;
+        case address::T:   invoke = &T::T; break;
+        case address::WT:  invoke = &T::WT; break;
+        case address::DWT: invoke = &T::DWT; break;
+        case address::C:   invoke = &T::C; break;
+        case address::WC:  invoke = &T::WC; break;
+        case address::DWC: invoke = &T::DWC; break;
+        case address::RT:  invoke = &T::RT; break;
+        case address::DRT: invoke = &T::DRT; break;
+        case address::RC:  invoke = &T::RC; break;
+        case address::DRC: invoke = &T::DRC; break;
+        case address::R:   invoke = &T::R; break;
+        case address::DR:  invoke = &T::DR; break;
+        case address::D:   invoke = &T::D; break;
+        case address::DD:  invoke = &T::DD; break;
+        case address::F:   invoke = &T::F; break;
+        case address::DF:  invoke = &T::DF; break;
         }
     }
 };

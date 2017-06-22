@@ -20,14 +20,15 @@ namespace detail {
 
 class alignment final
 {
-    using layout_t = bool(alignment::*)() const noexcept;
+    bool contiguous() const noexcept
+    { return true; }
 
-    dispatcher<layout_t> dispatch_layout;
-    uint16_t addr;
+    bool alignas_8() const noexcept
+    { return addr % 8 == 0; }
 
 public:
     explicit alignment(address::symbol_t sym_, uint16_t addr_)
-      : dispatch_layout(sym_, layout{})
+      : dispatch_layout(sym_)
       , addr(addr_)
     {
     }
@@ -37,43 +38,42 @@ public:
     }
 
 private:
-    bool contiguous() const noexcept
-    { return true; }
-
-    bool alignas_8() const noexcept
-    { return addr % 8 == 0; }
-
     struct layout final
     {
-        constexpr auto X()   const noexcept { return &alignment::contiguous; }
-        constexpr auto WX()  const noexcept { return &alignment::alignas_8; }
-        constexpr auto DWX() const noexcept { return &alignment::alignas_8; }
-        constexpr auto Y()   const noexcept { return &alignment::contiguous; }
-        constexpr auto WY()  const noexcept { return &alignment::alignas_8; }
-        constexpr auto DWY() const noexcept { return &alignment::alignas_8; }
-        constexpr auto M()   const noexcept { return &alignment::contiguous; }
-        constexpr auto WM()  const noexcept { return &alignment::alignas_8; }
-        constexpr auto DWM() const noexcept { return &alignment::alignas_8; }
-        constexpr auto S()   const noexcept { return &alignment::contiguous; }
-        constexpr auto WS()  const noexcept { return &alignment::alignas_8; }
-        constexpr auto DWS() const noexcept { return &alignment::alignas_8; }
-        constexpr auto T()   const noexcept { return &alignment::contiguous; }
-        constexpr auto WT()  const noexcept { return &alignment::alignas_8; }
-        constexpr auto DWT() const noexcept { return &alignment::alignas_8; }
-        constexpr auto C()   const noexcept { return &alignment::contiguous; }
-        constexpr auto WC()  const noexcept { return &alignment::alignas_8; }
-        constexpr auto DWC() const noexcept { return &alignment::alignas_8; }
-        constexpr auto RT()  const noexcept { return &alignment::contiguous; }
-        constexpr auto DRT() const noexcept { return &alignment::contiguous; }
-        constexpr auto RC()  const noexcept { return &alignment::contiguous; }
-        constexpr auto DRC() const noexcept { return &alignment::contiguous; }
-        constexpr auto R()   const noexcept { return &alignment::contiguous; }
-        constexpr auto DR()  const noexcept { return &alignment::contiguous; }
-        constexpr auto D()   const noexcept { return &alignment::contiguous; }
-        constexpr auto DD()  const noexcept { return &alignment::contiguous; }
-        constexpr auto F()   const noexcept { return &alignment::contiguous; }
-        constexpr auto DF()  const noexcept { return &alignment::contiguous; }
+        constexpr static auto X()   noexcept { return &alignment::contiguous; }
+        constexpr static auto WX()  noexcept { return &alignment::alignas_8; }
+        constexpr static auto DWX() noexcept { return &alignment::alignas_8; }
+        constexpr static auto Y()   noexcept { return &alignment::contiguous; }
+        constexpr static auto WY()  noexcept { return &alignment::alignas_8; }
+        constexpr static auto DWY() noexcept { return &alignment::alignas_8; }
+        constexpr static auto M()   noexcept { return &alignment::contiguous; }
+        constexpr static auto WM()  noexcept { return &alignment::alignas_8; }
+        constexpr static auto DWM() noexcept { return &alignment::alignas_8; }
+        constexpr static auto S()   noexcept { return &alignment::contiguous; }
+        constexpr static auto WS()  noexcept { return &alignment::alignas_8; }
+        constexpr static auto DWS() noexcept { return &alignment::alignas_8; }
+        constexpr static auto T()   noexcept { return &alignment::contiguous; }
+        constexpr static auto WT()  noexcept { return &alignment::alignas_8; }
+        constexpr static auto DWT() noexcept { return &alignment::alignas_8; }
+        constexpr static auto C()   noexcept { return &alignment::contiguous; }
+        constexpr static auto WC()  noexcept { return &alignment::alignas_8; }
+        constexpr static auto DWC() noexcept { return &alignment::alignas_8; }
+        constexpr static auto RT()  noexcept { return &alignment::contiguous; }
+        constexpr static auto DRT() noexcept { return &alignment::contiguous; }
+        constexpr static auto RC()  noexcept { return &alignment::contiguous; }
+        constexpr static auto DRC() noexcept { return &alignment::contiguous; }
+        constexpr static auto R()   noexcept { return &alignment::contiguous; }
+        constexpr static auto DR()  noexcept { return &alignment::contiguous; }
+        constexpr static auto D()   noexcept { return &alignment::contiguous; }
+        constexpr static auto DD()  noexcept { return &alignment::contiguous; }
+        constexpr static auto F()   noexcept { return &alignment::contiguous; }
+        constexpr static auto DF()  noexcept { return &alignment::contiguous; }
     };
+
+private:
+    using layout_t = bool(alignment::*)() const noexcept;
+    dispatcher<layout_t, layout> dispatch_layout;
+    uint16_t addr;
 };
 
 } /* namespace detail */

@@ -19,12 +19,9 @@ namespace detail {
 
 class limits final
 {
-    dispatcher<uint16_t> dispatch_highest_address;
-    uint16_t addr;
-
 public:
     explicit limits(address::symbol_t sym_, uint16_t addr_)
-      : dispatch_highest_address(sym_, highest_address{})
+      : dispatch_highest_address(sym_)
       , addr(addr_)
     {
     }
@@ -41,35 +38,39 @@ public:
 private:
     struct highest_address final
     {
-        constexpr uint16_t X()   const noexcept { return 9999; }
-        constexpr uint16_t WX()  const noexcept { return 9984; }
-        constexpr uint16_t DWX() const noexcept { return 9968; }
-        constexpr uint16_t Y()   const noexcept { return 9999; }
-        constexpr uint16_t WY()  const noexcept { return 9984; }
-        constexpr uint16_t DWY() const noexcept { return 9968; }
-        constexpr uint16_t M()   const noexcept { return 9999; }
-        constexpr uint16_t WM()  const noexcept { return 9984; }
-        constexpr uint16_t DWM() const noexcept { return 9968; }
-        constexpr uint16_t S()   const noexcept { return 9999; }
-        constexpr uint16_t WS()  const noexcept { return 9984; }
-        constexpr uint16_t DWS() const noexcept { return 9968; }
-        constexpr uint16_t T()   const noexcept { return 9999; }
-        constexpr uint16_t WT()  const noexcept { return 9984; }
-        constexpr uint16_t DWT() const noexcept { return 9968; }
-        constexpr uint16_t C()   const noexcept { return 9999; }
-        constexpr uint16_t WC()  const noexcept { return 9984; }
-        constexpr uint16_t DWC() const noexcept { return 9968; }
-        constexpr uint16_t RT()  const noexcept { return 9999; }
-        constexpr uint16_t DRT() const noexcept { return 9998; }
-        constexpr uint16_t RC()  const noexcept { return 9999; }
-        constexpr uint16_t DRC() const noexcept { return 9998; }
-        constexpr uint16_t R()   const noexcept { return 65535; }
-        constexpr uint16_t DR()  const noexcept { return 65534; }
-        constexpr uint16_t D()   const noexcept { return 65535; }
-        constexpr uint16_t DD()  const noexcept { return 65534; }
-        constexpr uint16_t F()   const noexcept { return 65535; }
-        constexpr uint16_t DF()  const noexcept { return 65534; }
+        constexpr static uint16_t X()   noexcept { return 9999; }
+        constexpr static uint16_t WX()  noexcept { return 9984; }
+        constexpr static uint16_t DWX() noexcept { return 9968; }
+        constexpr static uint16_t Y()   noexcept { return 9999; }
+        constexpr static uint16_t WY()  noexcept { return 9984; }
+        constexpr static uint16_t DWY() noexcept { return 9968; }
+        constexpr static uint16_t M()   noexcept { return 9999; }
+        constexpr static uint16_t WM()  noexcept { return 9984; }
+        constexpr static uint16_t DWM() noexcept { return 9968; }
+        constexpr static uint16_t S()   noexcept { return 9999; }
+        constexpr static uint16_t WS()  noexcept { return 9984; }
+        constexpr static uint16_t DWS() noexcept { return 9968; }
+        constexpr static uint16_t T()   noexcept { return 9999; }
+        constexpr static uint16_t WT()  noexcept { return 9984; }
+        constexpr static uint16_t DWT() noexcept { return 9968; }
+        constexpr static uint16_t C()   noexcept { return 9999; }
+        constexpr static uint16_t WC()  noexcept { return 9984; }
+        constexpr static uint16_t DWC() noexcept { return 9968; }
+        constexpr static uint16_t RT()  noexcept { return 9999; }
+        constexpr static uint16_t DRT() noexcept { return 9998; }
+        constexpr static uint16_t RC()  noexcept { return 9999; }
+        constexpr static uint16_t DRC() noexcept { return 9998; }
+        constexpr static uint16_t R()   noexcept { return 65535; }
+        constexpr static uint16_t DR()  noexcept { return 65534; }
+        constexpr static uint16_t D()   noexcept { return 65535; }
+        constexpr static uint16_t DD()  noexcept { return 65534; }
+        constexpr static uint16_t F()   noexcept { return 65535; }
+        constexpr static uint16_t DF()  noexcept { return 65534; }
     };
+
+private:
+    dispatcher<uint16_t, highest_address> dispatch_highest_address;
+    uint16_t addr;
 };
 
 } /* namespace detail */

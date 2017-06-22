@@ -22,14 +22,10 @@ namespace detail {
 
 class dumper final
 {
-    dispatcher<char const*> dispatch_symbol;
-    dispatcher<int> dispatch_maxlength;
-    uint16_t addr;
-
 public:
     explicit dumper(address::symbol_t sym_, uint16_t addr_)
-      : dispatch_symbol(sym_, symbol{})
-      , dispatch_maxlength(sym_, max_length{})
+      : dispatch_symbol(sym_)
+      , dispatch_maxlength(sym_)
       , addr(addr_)
     {
     }
@@ -45,34 +41,34 @@ public:
 public:
     struct symbol final
     {
-        constexpr auto X() const noexcept { return "X"; }
-        constexpr auto WX() const noexcept { return "WX"; }
-        constexpr auto DWX() const noexcept { return "DWX"; }
-        constexpr auto Y() const noexcept { return "Y"; }
-        constexpr auto WY() const noexcept { return "WY"; }
-        constexpr auto DWY() const noexcept { return "DWY"; }
-        constexpr auto M() const noexcept { return "M"; }
-        constexpr auto WM() const noexcept { return "WM"; }
-        constexpr auto DWM() const noexcept { return "DWM"; }
-        constexpr auto S() const noexcept { return "S"; }
-        constexpr auto WS() const noexcept { return "WS"; }
-        constexpr auto DWS() const noexcept { return "DWS"; }
-        constexpr auto T() const noexcept { return "T"; }
-        constexpr auto WT() const noexcept { return "WT"; }
-        constexpr auto DWT() const noexcept { return "DWT"; }
-        constexpr auto C() const noexcept { return "C"; }
-        constexpr auto WC() const noexcept { return "WC"; }
-        constexpr auto DWC() const noexcept { return "DWC"; }
-        constexpr auto RT() const noexcept { return "RT"; }
-        constexpr auto DRT() const noexcept { return "DRT"; }
-        constexpr auto RC() const noexcept { return "RC"; }
-        constexpr auto DRC() const noexcept { return "DRC"; }
-        constexpr auto R() const noexcept { return "R"; }
-        constexpr auto DR() const noexcept { return "DR"; }
-        constexpr auto D() const noexcept { return "D"; }
-        constexpr auto DD() const noexcept { return "DD"; }
-        constexpr auto F() const noexcept { return "F"; }
-        constexpr auto DF() const noexcept { return "DF"; }
+        constexpr static auto X() noexcept { return "X"; }
+        constexpr static auto WX() noexcept { return "WX"; }
+        constexpr static auto DWX() noexcept { return "DWX"; }
+        constexpr static auto Y() noexcept { return "Y"; }
+        constexpr static auto WY() noexcept { return "WY"; }
+        constexpr static auto DWY() noexcept { return "DWY"; }
+        constexpr static auto M() noexcept { return "M"; }
+        constexpr static auto WM() noexcept { return "WM"; }
+        constexpr static auto DWM() noexcept { return "DWM"; }
+        constexpr static auto S() noexcept { return "S"; }
+        constexpr static auto WS() noexcept { return "WS"; }
+        constexpr static auto DWS() noexcept { return "DWS"; }
+        constexpr static auto T() noexcept { return "T"; }
+        constexpr static auto WT() noexcept { return "WT"; }
+        constexpr static auto DWT() noexcept { return "DWT"; }
+        constexpr static auto C() noexcept { return "C"; }
+        constexpr static auto WC() noexcept { return "WC"; }
+        constexpr static auto DWC() noexcept { return "DWC"; }
+        constexpr static auto RT() noexcept { return "RT"; }
+        constexpr static auto DRT() noexcept { return "DRT"; }
+        constexpr static auto RC() noexcept { return "RC"; }
+        constexpr static auto DRC() noexcept { return "DRC"; }
+        constexpr static auto R() noexcept { return "R"; }
+        constexpr static auto DR() noexcept { return "DR"; }
+        constexpr static auto D() noexcept { return "D"; }
+        constexpr static auto DD() noexcept { return "DD"; }
+        constexpr static auto F() noexcept { return "F"; }
+        constexpr static auto DF() noexcept { return "DF"; }
     };
 
 public:
@@ -82,35 +78,40 @@ public:
         constexpr static int REGISTER_SIZE = 6;
         constexpr static int DOUBLE_REGISTER_SIZE = 7;
 
-        constexpr auto X() const noexcept { return DISCRETE_SIZE; }
-        constexpr auto WX() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DWX() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto Y() const noexcept { return DISCRETE_SIZE; }
-        constexpr auto WY() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DWY() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto M() const noexcept { return DISCRETE_SIZE; }
-        constexpr auto WM() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DWM() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto S() const noexcept { return DISCRETE_SIZE; }
-        constexpr auto WS() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DWS() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto T() const noexcept { return DISCRETE_SIZE; }
-        constexpr auto WT() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DWT() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto C() const noexcept { return DISCRETE_SIZE; }
-        constexpr auto WC() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DWC() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto RT() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DRT() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto RC() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DRC() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto R() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DR() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto D() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DD() const noexcept { return DOUBLE_REGISTER_SIZE; }
-        constexpr auto F() const noexcept { return REGISTER_SIZE; }
-        constexpr auto DF() const noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto X() noexcept { return DISCRETE_SIZE; }
+        constexpr static auto WX() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DWX() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto Y() noexcept { return DISCRETE_SIZE; }
+        constexpr static auto WY() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DWY() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto M() noexcept { return DISCRETE_SIZE; }
+        constexpr static auto WM() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DWM() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto S() noexcept { return DISCRETE_SIZE; }
+        constexpr static auto WS() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DWS() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto T() noexcept { return DISCRETE_SIZE; }
+        constexpr static auto WT() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DWT() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto C() noexcept { return DISCRETE_SIZE; }
+        constexpr static auto WC() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DWC() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto RT() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DRT() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto RC() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DRC() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto R() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DR() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto D() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DD() noexcept { return DOUBLE_REGISTER_SIZE; }
+        constexpr static auto F() noexcept { return REGISTER_SIZE; }
+        constexpr static auto DF() noexcept { return DOUBLE_REGISTER_SIZE; }
     };
+
+private:
+    dispatcher<char const*, symbol> dispatch_symbol;
+    dispatcher<int, max_length> dispatch_maxlength;
+    uint16_t addr;
 };
 
 } /* namespace detail */
