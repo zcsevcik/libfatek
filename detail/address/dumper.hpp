@@ -30,12 +30,15 @@ public:
     {
     }
 
-    std::size_t operator()(char* out) const
+    int operator()(char* out, int size) const
     {
         const char* strSym = dispatch_symbol();
         const int lenSym = static_cast<int>(std::strlen(strSym));
         const int addrlen = dispatch_maxlength() - lenSym;
-        return std::snprintf(out, 8, "%s%0*hu", strSym, addrlen, addr);
+        int nchars = std::snprintf(out, size, "%s%0*hu", strSym, addrlen, addr);
+        if (nchars > 0 and not(nchars >= size))
+            std::memset(&out[nchars], '\0', size - nchars);
+        return nchars;
     }
 
 public:

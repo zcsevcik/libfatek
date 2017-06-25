@@ -29,8 +29,11 @@ address address::parse(const char* s, bool& success) noexcept
     if (symbol == invalid_symbol)
         return success=false, address{};
 
-    address out;
-    detail::dumper{symbol, addr}(&out.value[0]);
+    address out{};
+    int nchars = detail::dumper{symbol, addr}(&out.value[0], sizeof address::value);
+    if (nchars < 0 or nchars >= static_cast<int>(sizeof address::value))
+        return abort(), success=false, address{};
+
     return success=true, out;
 }
 
