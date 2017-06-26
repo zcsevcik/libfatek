@@ -120,10 +120,9 @@ basic_parser::u16(const char* s) noexcept
 std::size_t
 basic_parser::find_first_not_upper_ascii(const char* s)
 {
-    const char* s_end = s;
-    while (std::isupper(*s_end, std::locale::classic()))
-        ++s_end;
-
+    const char* s_end = std::find_if_not(s, s+8, [](char c) {
+        return std::isupper(c, std::locale::classic());
+    });
     return static_cast<std::size_t>(s_end-s);
 };
 

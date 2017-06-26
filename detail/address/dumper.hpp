@@ -12,6 +12,7 @@
 
 #include "address.hpp"
 #include "detail/address/dispatcher.hpp"
+#include <algorithm>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -37,7 +38,7 @@ public:
         const int addrlen = dispatch_maxlength() - lenSym;
         int nchars = std::snprintf(out, size, "%s%0*hu", strSym, addrlen, addr);
         if (nchars > 0 and not(nchars >= size))
-            std::memset(&out[nchars], '\0', size - nchars);
+            std::fill_n(&out[nchars], size - nchars, '\0');
         return nchars;
     }
 
