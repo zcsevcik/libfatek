@@ -16,6 +16,8 @@ namespace detail {
 /* ======================================================================= */
 address::symbol_t basic_parser::symbol(const char *YYCURSOR) noexcept
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wchar-subscripts"
 /*!re2c
     re2c:define:YYCTYPE = char;
     re2c:yyfill:enable = 0;
@@ -53,6 +55,7 @@ address::symbol_t basic_parser::symbol(const char *YYCURSOR) noexcept
     "RT"  dec end { return address::RT; }
     "DRT" dec end { return address::DRT; }
 */
+#pragma GCC diagnostic pop
 }
 
 } /* namespace detail */
