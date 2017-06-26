@@ -60,9 +60,8 @@ private:
 int
 basic_parser::u16(const char* s) noexcept
 {
-    errno = 0;
     char *s_end = nullptr;
-    long value = std::strtol(s, &s_end, 10);
+    long value = (errno=0, std::strtol(s, &s_end, 10));
 
     if (s_end == s || *s_end != '\0')
         return -1;

@@ -99,17 +99,14 @@ X(test_props)
 #undef test_dump
 
 /* ======================================================================= */
-#define test_highest_address(adr, max_addr, ...)                \
-TEST(address, adr##max_addr##_is_highest_address)               \
-{                                                               \
-    bool success = false;                                       \
-    address::parse(#adr #max_addr, success);                    \
-    ASSERT_EQ(success, true);                                   \
-                                                                \
-    char buf[16];                                               \
-    std::snprintf(buf, sizeof buf, #adr "%u", 8u+max_addr);     \
-    address::parse(buf, success);                               \
-    ASSERT_EQ(success, false);                                  \
+#define test_highest_address(adr, max_addr, ...)                          \
+TEST(address, adr##max_addr##_is_highest_address)                         \
+{                                                                         \
+    bool success = false;                                                 \
+    ASSERT_EQ((address::parse(#adr #max_addr, success), success), true);  \
+                                                                          \
+    char buf[16]; std::snprintf(buf, sizeof buf, #adr "%u", 8u+max_addr); \
+    ASSERT_EQ((address::parse(buf, success), success), false);            \
 }
 
 #define X(_, ...) \
@@ -147,16 +144,16 @@ X(test_highest_address)
 #undef test_highest_address
 
 /* ======================================================================= */
-#define test_alignment(adr, ...)                                   \
-TEST(address, adr##_alignas_8)                                     \
-{                                                                  \
-    bool success = false;                                          \
-    address::parse(#adr "7", success);  ASSERT_EQ(success, false); \
-    address::parse(#adr "8", success);  ASSERT_EQ(success, true);  \
-    address::parse(#adr "9", success);  ASSERT_EQ(success, false); \
-    address::parse(#adr "15", success); ASSERT_EQ(success, false); \
-    address::parse(#adr "16", success); ASSERT_EQ(success, true);  \
-    address::parse(#adr "17", success); ASSERT_EQ(success, false); \
+#define test_alignment(adr, ...)                                     \
+TEST(address, adr##_alignas_8)                                       \
+{                                                                    \
+    bool success = false;                                            \
+    ASSERT_EQ((address::parse(#adr "7", success),  success), false); \
+    ASSERT_EQ((address::parse(#adr "8", success),  success), true);  \
+    ASSERT_EQ((address::parse(#adr "9", success),  success), false); \
+    ASSERT_EQ((address::parse(#adr "15", success), success), false); \
+    ASSERT_EQ((address::parse(#adr "16", success), success), true);  \
+    ASSERT_EQ((address::parse(#adr "17", success), success), false); \
 }
 
 #define X(_, ...) \
@@ -181,31 +178,24 @@ X(test_alignment)
 TEST(address, missing_number_fails)
 {
     bool success = false;
-    address a = address::parse("DWX", success);
-    ASSERT_EQ(success, false);
-    ASSERT_STREQ("", a.dump());
+    ASSERT_EQ((address::parse("DWX", success), success), false);
 }
 
 TEST(address, unexpected_characters_after_number_fails)
 {
     bool success = false;
-    address a = address::parse("DWX2048Y", success);
-    ASSERT_EQ(success, false);
-    ASSERT_STREQ("", a.dump());
+    ASSERT_EQ((address::parse("DWX2048Y", success), success), false);
 }
 
 TEST(address, too_big_number_fails)
 {
     bool success = false;
-    address a = address::parse("DWX18446744073709551615", success);
-    ASSERT_EQ(success, false);
-    ASSERT_STREQ("", a.dump());
+    ASSERT_EQ((address::parse("DWX18446744073709551615", success), success), false);
 }
 
-TEST(address, negative_number_fails)
+TEST(address, numbers_with_sign_fails)
 {
     bool success = false;
-    address a = address::parse("X-8", success);
-    ASSERT_EQ(success, false);
-    ASSERT_STREQ("", a.dump());
+    ASSERT_EQ((address::parse("X+8", success), success), false);
+    ASSERT_EQ((address::parse("X-8", success), success), false);
 }
