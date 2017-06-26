@@ -176,3 +176,36 @@ TEST(address, adr##_alignas_8)                                     \
 X(test_alignment)
 #undef X
 #undef test_alignment
+
+/* ======================================================================= */
+TEST(address, missing_number_fails)
+{
+    bool success = false;
+    address a = address::parse("DWX", success);
+    ASSERT_EQ(success, false);
+    ASSERT_STREQ("", a.dump());
+}
+
+TEST(address, unexpected_characters_after_number_fails)
+{
+    bool success = false;
+    address a = address::parse("DWX2048Y", success);
+    ASSERT_EQ(success, false);
+    ASSERT_STREQ("", a.dump());
+}
+
+TEST(address, too_big_number_fails)
+{
+    bool success = false;
+    address a = address::parse("DWX18446744073709551615", success);
+    ASSERT_EQ(success, false);
+    ASSERT_STREQ("", a.dump());
+}
+
+TEST(address, negative_number_fails)
+{
+    bool success = false;
+    address a = address::parse("X-8", success);
+    ASSERT_EQ(success, false);
+    ASSERT_STREQ("", a.dump());
+}
