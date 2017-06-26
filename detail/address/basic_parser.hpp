@@ -57,49 +57,6 @@ private:
 };
 
 /* ======================================================================= */
-address::symbol_t
-basic_parser::symbol(const char* YYCURSOR) noexcept
-{
-  /*!re2c
-    re2c:define:YYCTYPE = char;
-    re2c:yyfill:enable = 0;
-
-    dec = [0-9]+;
-    end = "\x00";
-
-    "*"           { return static_cast<address::symbol_t>(-1); }
-    "C"   dec end { return address::C; }
-    "WC"  dec end { return address::WC; }
-    "DWC" dec end { return address::DWC; }
-    "RC"  dec end { return address::RC; }
-    "DRC" dec end { return address::DRC; }
-    "D"   dec end { return address::D; }
-    "DD"  dec end { return address::DD; }
-    "R"   dec end { return address::R; }
-    "DR"  dec end { return address::DR; }
-    "F"   dec end { return address::F; }
-    "DF"  dec end { return address::DF; }
-    "X"   dec end { return address::X; }
-    "WX"  dec end { return address::WX; }
-    "DWX" dec end { return address::DWX; }
-    "M"   dec end { return address::M; }
-    "WM"  dec end { return address::WM; }
-    "DWM" dec end { return address::DWM; }
-    "Y"   dec end { return address::Y; }
-    "WY"  dec end { return address::WY; }
-    "DWY" dec end { return address::DWY; }
-    "S"   dec end { return address::S; }
-    "WS"  dec end { return address::WS; }
-    "DWS" dec end { return address::DWS; }
-    "T"   dec end { return address::T; }
-    "WT"  dec end { return address::WT; }
-    "DWT" dec end { return address::DWT; }
-    "RT"  dec end { return address::RT; }
-    "DRT" dec end { return address::DRT; }
-  */
-}
-
-/* ======================================================================= */
 int
 basic_parser::u16(const char* s) noexcept
 {
@@ -132,5 +89,7 @@ basic_parser::find_first_not_upper_ascii(const char* s)
 } /* namespace detail */
 } /* namespace zcsevcik */
 } /* namespace libfatek */
+
+#include "detail/address/lexer.inl"
 
 #endif /* ZCSEVCIK_LIBFATEK_DETAIL_ADDRESS_BASIC_PARSER_HPP_ */

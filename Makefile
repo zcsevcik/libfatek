@@ -19,7 +19,9 @@ address.o: address.cpp address.hpp detail/address/alignment.hpp detail/address/b
            detail/address/dispatcher.hpp detail/address/dumper.hpp detail/address/limits.hpp \
 		   detail/address/parser.hpp
 
-detail/address/basic_parser.hpp: detail/address/basic_parser.hpp.re2c
+detail/address/basic_parser.hpp: | detail/address/lexer.inl
+detail/address/lexer.inl: detail/address/lexer.inl.re2c
+	re2c -g -o $@ $<
 
 libgtest.a: gtest.o
 gtest.o: $(GOOGLETEST_ROOT)/src/gtest-all.cc
@@ -31,6 +33,3 @@ gtest_main.o: $(GOOGLETEST_ROOT)/src/gtest_main.cc
 
 %.a:
 	$(AR) $(ARFLAGS) $@ $^
-
-%.hpp: %.hpp.re2c
-	re2c -s -o $@ $<
