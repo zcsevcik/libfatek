@@ -10,6 +10,7 @@ clean:; rm -f ./t-address
 ARFLAGS = rcs
 CPPFLAGS += -I.
 CXXFLAGS += -std=c++14 -Wall -Wextra -Weffc++ -fprofile-arcs -ftest-coverage
+GOOGLETEST_ROOT ?= /usr/src/gtest
 
 t-address: t-address.cpp address.o | libgtest.a libgtest_main.a
 	$(CXX) $(CXXFLAGS) -L. $^ -lgtest_main -lgtest -lpthread -o $@
