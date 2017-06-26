@@ -11,6 +11,7 @@
 #define ZCSEVCIK_LIBFATEK_DETAIL_ADDRESS_BASIC_PARSER_HPP_
 
 #include "address.hpp"
+#include <algorithm>
 #include <cerrno>
 #include <cstdlib>
 #include <locale>

@@ -1,0 +1,30 @@
+dist: trusty
+sudo: false
+language: cpp
+compiler: gcc
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-6
+      - re2c
+      - libgtest-dev
+
+env:
+  global:
+    - GOOGLETEST_ROOT=/usr/src/gtest
+
+before_install:
+  - pip install --user cpp-coveralls
+  - export CC=gcc-6 CXX=g++-6
+
+script:
+  - make && make check
+
+after_success:
+  - coveralls --gcov-options '\-lp'
+
+notifications:
+  email: false
