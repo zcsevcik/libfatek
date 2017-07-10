@@ -1,8 +1,9 @@
 all: t-address
 .PHONY: all
 
-check: t-address; ./t-address
-check: t-command; ./t-command
+check: t-address t-command
+	./t-address
+	./t-command
 .PHONY: check
 
 clean:; rm -f ./t-address
