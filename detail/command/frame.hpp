@@ -69,7 +69,7 @@ public:
     void operator()(station const& station_no) noexcept
     { byte(static_cast<unsigned char>( station_no.value() )); }
 
-    void operator()(command_code cc) noexcept
+    void operator()(command::code cc) noexcept
     { byte(static_cast<unsigned char>(cc)); }
 
     void operator()(error_code ec) noexcept
@@ -127,7 +127,7 @@ public:
     constexpr int operator()(station const&) const noexcept
     { return 2; }
 
-    constexpr int operator()(command_code) const noexcept
+    constexpr int operator()(command::code) const noexcept
     { return 2; }
 
     constexpr int operator()(error_code) const noexcept

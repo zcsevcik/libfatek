@@ -17,21 +17,6 @@
 namespace zcsevcik {
 namespace libfatek {
 /* ======================================================================= */
-enum class command_code {
-    read_the_system_status_of_PLC = 0x40,
-    control_the_PLC_RUN_STOP = 0x41,
-    single_discrete_control = 0x42,
-    the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete = 0x43,
-    the_status_reading_of_continuous_discrete = 0x44,
-    write_the_status_to_continuous_discrete = 0x45,
-    read_the_data_from_continuous_registers = 0x46,
-    write_to_continuous_registers = 0x47,
-    mixed_read_the_random_discrete_status_or_register_data = 0x48,
-    mixed_write_the_random_discrete_status_or_register_data = 0x49,
-    loop_back_testing = 0x4E,
-    read_the_detailed_system_status_of_PLC = 0x53,
-};
-
 enum class error_code {
     error_free = 0x0,
     illegal_value = 0x2,
@@ -84,6 +69,21 @@ public:
 
     void station_no(int value) noexcept
     { station_no_ = std::move(station(value)); }
+
+    enum class code {
+        read_the_system_status_of_PLC = 0x40,
+        control_the_PLC_RUN_STOP = 0x41,
+        single_discrete_control = 0x42,
+        the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete = 0x43,
+        the_status_reading_of_continuous_discrete = 0x44,
+        write_the_status_to_continuous_discrete = 0x45,
+        read_the_data_from_continuous_registers = 0x46,
+        write_to_continuous_registers = 0x47,
+        mixed_read_the_random_discrete_status_or_register_data = 0x48,
+        mixed_write_the_random_discrete_status_or_register_data = 0x49,
+        loop_back_testing = 0x4E,
+        read_the_detailed_system_status_of_PLC = 0x53,
+    };
 
 protected:
     station station_no_;
@@ -143,8 +143,8 @@ class loop_back_testing final
   : public command
 {
 public:
-    constexpr static command_code command_code()
-    { return command_code::loop_back_testing; }
+    constexpr static command::code command_code()
+    { return command::code::loop_back_testing; }
 
 public:
     loop_back_testing() noexcept
@@ -175,8 +175,8 @@ class read_the_system_status_of_PLC final
   : public command
 {
 public:
-    constexpr static command_code command_code()
-    { return command_code::read_the_system_status_of_PLC; }
+    constexpr static command::code command_code()
+    { return command::code::read_the_system_status_of_PLC; }
 
 public:
     read_the_system_status_of_PLC() noexcept
@@ -191,8 +191,8 @@ class read_the_detailed_system_status_of_PLC final
   : public command
 {
 public:
-    constexpr static command_code command_code()
-    { return command_code::read_the_detailed_system_status_of_PLC; }
+    constexpr static command::code command_code()
+    { return command::code::read_the_detailed_system_status_of_PLC; }
 
 public:
     read_the_detailed_system_status_of_PLC() noexcept
@@ -207,8 +207,8 @@ class control_the_PLC_RUN_STOP final
   : public command
 {
 public:
-    constexpr static command_code command_code()
-    { return command_code::control_the_PLC_RUN_STOP; }
+    constexpr static command::code command_code()
+    { return command::code::control_the_PLC_RUN_STOP; }
 
 public:
     explicit control_the_PLC_RUN_STOP() noexcept
@@ -236,8 +236,8 @@ class single_discrete_control final
   : public command_with_address
 {
 public:
-    constexpr static command_code command_code()
-    { return command_code::single_discrete_control; }
+    constexpr static command::code command_code()
+    { return command::code::single_discrete_control; }
 
 public:
     single_discrete_control() noexcept
@@ -266,8 +266,8 @@ class the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete final
   : public command_with_continuous_address
 {
 public:
-    constexpr static command_code command_code()
-    { return command_code::the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete; }
+    constexpr static command::code command_code()
+    { return command::code::the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete; }
 
 public:
     the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete() noexcept
@@ -282,8 +282,8 @@ class read_the_data_from_continuous_registers final
   : public command_with_continuous_address
 {
 public:
-    constexpr static command_code command_code()
-    { return command_code::read_the_data_from_continuous_registers; }
+    constexpr static command::code command_code()
+    { return command::code::read_the_data_from_continuous_registers; }
 
 public:
     read_the_data_from_continuous_registers() noexcept
@@ -298,8 +298,8 @@ class the_status_reading_of_continuous_discrete final
   : public command_with_continuous_address
 {
 public:
-    constexpr static command_code command_code()
-    { return command_code::the_status_reading_of_continuous_discrete; }
+    constexpr static command::code command_code()
+    { return command::code::the_status_reading_of_continuous_discrete; }
 
 public:
     the_status_reading_of_continuous_discrete() noexcept
