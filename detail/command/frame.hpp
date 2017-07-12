@@ -51,7 +51,7 @@ public:
     writer& operator=(writer &&) = delete;
 
     template<typename T>
-    writer& operator<<(T t) noexcept
+    writer& operator<<(T&& t) noexcept
     {
         this->operator()(std::forward<T>(t));
         return *this;
