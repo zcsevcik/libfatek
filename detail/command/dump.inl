@@ -16,7 +16,7 @@ namespace detail {
 /* ======================================================================= */
 template<class T, typename... Args>
 static int
-dump_internal(char* buffer, int bufsize, T& cmd, Args... args) noexcept
+dump_internal(char* buffer, int bufsize, T& cmd, Args&&... args) noexcept
 {
     using namespace detail;
     count_bytes size{};
