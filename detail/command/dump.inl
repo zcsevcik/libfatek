@@ -22,14 +22,14 @@ dump_internal(char* buffer, int bufsize, T& cmd, Args&&... args) noexcept
     count_bytes size{};
     checksum LRC{buffer};
 
-    const int hdrlen = size(STX{}) + size(cmd.station_no())
-                     + size(cmd.command_code()) + size(LRC) + size(ETX{});
-    const int payload = (( 0 + ... + size(args) ));
-    const int framelen = hdrlen + payload;
+    const int length = size(STX{}) + size(cmd.station_no())
+                     + size(cmd.command_code())
+                     + (( 0 + ... + size(args) ))
+                     + size(LRC) + size(ETX{});
 
     if (buffer == nullptr)      return -1;
     if (bufsize < 0)            return -1;
-    if (bufsize <= framelen)    return framelen+1;
+    if (bufsize <= length)      return length+1;
 
     char* buffer_end = buffer;
     writer wr(&buffer_end);
