@@ -17,7 +17,7 @@
 namespace zcsevcik {
 namespace libfatek {
 /* ======================================================================= */
-enum class error_code {
+enum class error_code_t {
     error_free = 0x0,
     illegal_value = 0x2,
     illegal_format_or_communication_command_cannot_execute = 0x4,
@@ -29,13 +29,29 @@ enum class error_code {
 };
 
 /* ======================================================================= */
+enum class command_code_t {
+    read_the_system_status_of_PLC = 0x40,
+    control_the_PLC_RUN_STOP = 0x41,
+    single_discrete_control = 0x42,
+    the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete = 0x43,
+    the_status_reading_of_continuous_discrete = 0x44,
+    write_the_status_to_continuous_discrete = 0x45,
+    read_the_data_from_continuous_registers = 0x46,
+    write_to_continuous_registers = 0x47,
+    mixed_read_the_random_discrete_status_or_register_data = 0x48,
+    mixed_write_the_random_discrete_status_or_register_data = 0x49,
+    loop_back_testing = 0x4E,
+    read_the_detailed_system_status_of_PLC = 0x53,
+};
+
+/* ======================================================================= */
 class station final
 {
     typedef unsigned char value_type;
     value_type no_;
 
 public:
-    explicit station(value_type value)
+    station(value_type value)
       : no_(value)
     { }
 
@@ -53,262 +69,158 @@ public:
 };
 
 /* ======================================================================= */
+#define PROPERTY(name, type, default_value) \
+public: \
+    type const& name() const noexcept { return name##_; } \
+    void name(type value) noexcept { name##_ = std::move(value); } \
+protected: \
+    type name##_ = (default_value); \
+private:
+
+#define COMMAND_CODE(value) \
+public: constexpr static command_code_t command_code() { return command_code_t::value; } \
+private:
+
+#define PROPERTY_ADDRESS(name) \
+PROPERTY(name, address, address()) \
+public: \
+    bool name(const char* s) noexcept { \
+        bool success = false; \
+        return name##_ = address::parse(s, success), success; \
+    } \
+private:
+
+/* ======================================================================= */
 class command
 {
 protected:
-    command()
-      : station_no_(1)
-    { }
-
+    command() = default;
 public:
-    station const& station_no() const noexcept
-    { return station_no_; }
-
-    void station_no(station value) noexcept
-    { station_no_ = std::move(value); }
-
-    void station_no(int value) noexcept
-    { station_no_ = std::move(station(value)); }
-
-    enum class code {
-        read_the_system_status_of_PLC = 0x40,
-        control_the_PLC_RUN_STOP = 0x41,
-        single_discrete_control = 0x42,
-        the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete = 0x43,
-        the_status_reading_of_continuous_discrete = 0x44,
-        write_the_status_to_continuous_discrete = 0x45,
-        read_the_data_from_continuous_registers = 0x46,
-        write_to_continuous_registers = 0x47,
-        mixed_read_the_random_discrete_status_or_register_data = 0x48,
-        mixed_write_the_random_discrete_status_or_register_data = 0x49,
-        loop_back_testing = 0x4E,
-        read_the_detailed_system_status_of_PLC = 0x53,
-    };
-
-protected:
-    station station_no_;
+    command(command const&) = default;
+    command& operator=(command const&) = default;
+    command(command &&) = default;
+    command& operator=(command &&) = default;
+    virtual ~command() = default;
+public:
+    virtual int dump(char* buffer, int size) const noexcept = 0;
 };
 
-/* ======================================================================= */
-class command_with_address
-  : public command
+class response
 {
 protected:
-    command_with_address()
-      : command()
-      , start_no_()
-    { }
-
+    response() = default;
 public:
-    address const& start_no() const noexcept
-    { return start_no_; }
-
-    void start_no(address value) noexcept
-    { start_no_ = std::move(value); }
-
-    bool start_no(const char* s) noexcept
-    {
-        bool success = false;
-        return start_no_ = address::parse(s, success), success;
-    }
-
-protected:
-    address start_no_;
+    response(response const&) = default;
+    response& operator=(response const&) = default;
+    response(response &&) = default;
+    response& operator=(response &&) = default;
+    virtual ~response() = default;
+public:
+    virtual int load(char const* buffer, int size) noexcept = 0;
 };
 
 /* ======================================================================= */
-class command_with_continuous_address
-  : public command_with_address
+class loop_back_testing final : public command, public response
 {
-protected:
-    command_with_continuous_address()
-      : command_with_address()
-      , addresses_count_(1)
-    { }
+    COMMAND_CODE(loop_back_testing)
+    PROPERTY(station_no, station, station(1))
+    PROPERTY(data, std::string, std::string())
 
 public:
-    int addresses_count() const noexcept
-    { return addresses_count_; }
-
-    void addresses_count(int value) noexcept
-    { addresses_count_ = std::move(value); }
-
-protected:
-    // 1<=N<=256
-    int addresses_count_;
+    virtual int dump(char* buffer, int size) const noexcept override;
+    virtual int load(char const*, int) noexcept override { return -1; }
 };
 
 /* ======================================================================= */
-class loop_back_testing final
-  : public command
+class read_the_system_status_of_PLC final : public command
 {
-public:
-    constexpr static command::code command_code()
-    { return command::code::loop_back_testing; }
+    COMMAND_CODE(read_the_system_status_of_PLC)
+    PROPERTY(station_no, station, station(1))
 
 public:
-    loop_back_testing() noexcept
-      : command()
-      , data_()
-    { }
-
-    int dump(char* buffer, int size) const noexcept;
-
-    loop_back_testing getResponse() const noexcept
-    { return loop_back_testing(); }
-
-    int load(const char* buffer, int size) noexcept;
-
-public:
-    std::string const& data() const noexcept
-    { return data_; }
-
-    void data(std::string value) noexcept
-    { data_ = std::move(value); }
-
-private:
-    std::string data_;
+    virtual int dump(char* buffer, int size) const noexcept override;
 };
 
 /* ======================================================================= */
-class read_the_system_status_of_PLC final
-  : public command
+class read_the_detailed_system_status_of_PLC final : public command
 {
-public:
-    constexpr static command::code command_code()
-    { return command::code::read_the_system_status_of_PLC; }
+    COMMAND_CODE(read_the_detailed_system_status_of_PLC)
+    PROPERTY(station_no, station, station(1))
 
 public:
-    read_the_system_status_of_PLC() noexcept
-      : command()
-    { }
-
-    int dump(char* buffer, int size) const noexcept;
+    virtual int dump(char* buffer, int size) const noexcept override;
 };
 
 /* ======================================================================= */
-class read_the_detailed_system_status_of_PLC final
-  : public command
+class control_the_PLC_RUN_STOP final : public command
 {
-public:
-    constexpr static command::code command_code()
-    { return command::code::read_the_detailed_system_status_of_PLC; }
-
-public:
-    read_the_detailed_system_status_of_PLC() noexcept
-      : command()
-    { }
-
-    int dump(char* buffer, int size) const noexcept;
-};
-
-/* ======================================================================= */
-class control_the_PLC_RUN_STOP final
-  : public command
-{
-public:
-    constexpr static command::code command_code()
-    { return command::code::control_the_PLC_RUN_STOP; }
-
-public:
-    explicit control_the_PLC_RUN_STOP() noexcept
-      : command()
-      , control_code_(RUN)
-    { }
-
-    int dump(char* buffer, int size) const noexcept;
-
 public:
     enum control_code_t { STOP = 0, RUN = 1 };
 
-    control_code_t const& control_code() const noexcept
-    { return control_code_; }
+    COMMAND_CODE(control_the_PLC_RUN_STOP)
+    PROPERTY(station_no, station, station(1))
+    PROPERTY(control_code, enum control_code_t, RUN)
 
-    void control_code(control_code_t value) noexcept
-    { control_code_ = std::move(value); }
-
-private:
-    control_code_t control_code_;
+public:
+    virtual int dump(char* buffer, int size) const noexcept override;
 };
 
 /* ======================================================================= */
-class single_discrete_control final
-  : public command_with_address
+class single_discrete_control final : public command
 {
-public:
-    constexpr static command::code command_code()
-    { return command::code::single_discrete_control; }
-
-public:
-    single_discrete_control() noexcept
-      : command_with_address()
-      , running_code_(ENABLE)
-    { }
-
-    int dump(char* buffer, int size) const noexcept;
-
 public:
     enum running_code_t { DISABLE = 1, ENABLE = 2,
                           SET = 3, RESET = 4 };
 
-    running_code_t const& running_code() const noexcept
-    { return running_code_; }
+    COMMAND_CODE(single_discrete_control)
+    PROPERTY(station_no, station, station(1))
+    PROPERTY_ADDRESS(start_no)
+    PROPERTY(running_code, enum running_code_t, ENABLE)
 
-    void running_code(running_code_t value) noexcept
-    { running_code_ = std::move(value); }
-
-private:
-    running_code_t running_code_;
+public:
+    virtual int dump(char* buffer, int size) const noexcept override;
 };
 
 /* ======================================================================= */
-class the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete final
-  : public command_with_continuous_address
+class the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete final : public command
 {
-public:
-    constexpr static command::code command_code()
-    { return command::code::the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete; }
+    COMMAND_CODE(the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete)
+    PROPERTY(station_no, station, station(1))
+    PROPERTY_ADDRESS(start_no)
+    PROPERTY(addresses_count, int, 1)   // 1<=N<=256
 
 public:
-    the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete() noexcept
-      : command_with_continuous_address()
-    { }
-
-    int dump(char* buffer, int size) const noexcept;
+    virtual int dump(char* buffer, int size) const noexcept override;
 };
 
 /* ======================================================================= */
-class read_the_data_from_continuous_registers final
-  : public command_with_continuous_address
+class read_the_data_from_continuous_registers final : public command
 {
-public:
-    constexpr static command::code command_code()
-    { return command::code::read_the_data_from_continuous_registers; }
+    COMMAND_CODE(read_the_data_from_continuous_registers)
+    PROPERTY(station_no, station, station(1))
+    PROPERTY_ADDRESS(start_no)
+    PROPERTY(addresses_count, int, 1)   // 1<=N<=256
 
 public:
-    read_the_data_from_continuous_registers() noexcept
-      : command_with_continuous_address()
-    { }
-
-    int dump(char* buffer, int size) const noexcept;
+    virtual int dump(char* buffer, int size) const noexcept override;
 };
 
 /* ======================================================================= */
-class the_status_reading_of_continuous_discrete final
-  : public command_with_continuous_address
+class the_status_reading_of_continuous_discrete final : public command
 {
-public:
-    constexpr static command::code command_code()
-    { return command::code::the_status_reading_of_continuous_discrete; }
+    COMMAND_CODE(the_status_reading_of_continuous_discrete)
+    PROPERTY(station_no, station, station(1))
+    PROPERTY_ADDRESS(start_no)
+    PROPERTY(addresses_count, int, 1)   // 1<=N<=256
 
 public:
-    the_status_reading_of_continuous_discrete() noexcept
-      : command_with_continuous_address()
-    { }
-
-    int dump(char* buffer, int size) const noexcept;
+    virtual int dump(char* buffer, int size) const noexcept override;
 };
 
+
+#undef PROPERTY_ADDRESS
+#undef PROPERTY
+#undef COMMAND_CODE
 
 } /* namespace libfatek */
 } /* namespace zcsevcik */

@@ -69,10 +69,10 @@ public:
     void operator()(station const& station_no) noexcept
     { byte(static_cast<unsigned char>( station_no.value() )); }
 
-    void operator()(command::code cc) noexcept
+    void operator()(command_code_t cc) noexcept
     { byte(static_cast<unsigned char>(cc)); }
 
-    void operator()(error_code ec) noexcept
+    void operator()(error_code_t ec) noexcept
     { nibble(static_cast<unsigned char>(ec)); }
 
     void operator()(control_the_PLC_RUN_STOP::control_code_t cc) noexcept
@@ -127,10 +127,10 @@ public:
     constexpr int operator()(station const&) const noexcept
     { return 2; }
 
-    constexpr int operator()(command::code) const noexcept
+    constexpr int operator()(command_code_t) const noexcept
     { return 2; }
 
-    constexpr int operator()(error_code) const noexcept
+    constexpr int operator()(error_code_t) const noexcept
     { return 1; }
 
     constexpr int operator()(control_the_PLC_RUN_STOP::control_code_t) const noexcept
