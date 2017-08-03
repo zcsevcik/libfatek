@@ -1,4 +1,4 @@
-all: t-address
+all: t-address t-command
 .PHONY: all
 
 check: t-address t-command
@@ -6,12 +6,12 @@ check: t-address t-command
 	./t-command
 .PHONY: check
 
-clean:; rm -f ./t-address
+clean:; rm -f ./t-address ./t-command *.o *.a
 .PHONY: clean
 
 ARFLAGS = rcs
 CPPFLAGS += -I.
-CXXFLAGS += -std=gnu++1z -Wall -Wextra -Weffc++ -fprofile-arcs -ftest-coverage
+CXXFLAGS += -std=gnu++1z -g -O2 -Wall -Wextra -Weffc++ -fprofile-arcs -ftest-coverage
 GOOGLETEST_ROOT ?= /usr/src/gtest
 
 t-address: t-address.cpp address.o | libgtest.a libgtest_main.a
