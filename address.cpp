@@ -15,6 +15,9 @@
 
 namespace zcsevcik {
 namespace libfatek {
+
+using namespace detail;
+
 /* ======================================================================= */
 address::address() noexcept
   : value{}
@@ -24,13 +27,13 @@ address::address() noexcept
 address address::parse(const char* s, bool& success) noexcept
 {
     uint16_t addr = 0;
-    symbol_t symbol = detail::parser{s}(addr);
+    symbol_t symbol = parser{s}(addr);
 
     if (symbol == invalid_symbol)
         return success=false, address{};
 
     address out{};
-    int nchars = detail::dumper{symbol, addr}(&out.value[0], sizeof address::value);
+    int nchars = dumper{symbol, addr}(&out.value[0], sizeof address::value);
     if (nchars < 0 or nchars >= static_cast<int>(sizeof address::value))
         return abort(), success=false, address{};
 
@@ -39,7 +42,7 @@ address address::parse(const char* s, bool& success) noexcept
 
 address::symbol_t address::symbol() const noexcept
 {
-    return detail::basic_parser{dump()}();
+    return basic_parser{dump()}();
 }
 
 const char* address::dump() const noexcept
@@ -56,17 +59,17 @@ is_address_bytes_occupied(const char* s, int numchar) noexcept
 
 bool address::is_discrete_address() const noexcept
 {
-    return is_address_bytes_occupied(value, detail::dumper::max_length::DISCRETE_SIZE);
+    return is_address_bytes_occupied(value, dumper::max_length::DISCRETE_SIZE);
 }
 
 bool address::is_register_16_address() const noexcept
 {
-    return is_address_bytes_occupied(value, detail::dumper::max_length::REGISTER_SIZE);
+    return is_address_bytes_occupied(value, dumper::max_length::REGISTER_SIZE);
 }
 
 bool address::is_register_32_address() const noexcept
 {
-    return is_address_bytes_occupied(value, detail::dumper::max_length::DOUBLE_REGISTER_SIZE);
+    return is_address_bytes_occupied(value, dumper::max_length::DOUBLE_REGISTER_SIZE);
 }
 
 /* ======================================================================= */
