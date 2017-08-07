@@ -224,4 +224,5 @@ public:
 
 } /* namespace libfatek */
 } /* namespace zcsevcik */
+
 #endif  /* ZCSEVCIK_LIBFATEK_COMMAND_HPP_ */

@@ -1,5 +1,5 @@
 /*
- * zcsevcik/libfatek/detail/dump.inl
+ * zcsevcik/libfatek/detail/dump.hpp
  *
  * Author(s):      Radek Sevcik <zcsevcik@gmail.com>
  * Date:           2017/07/06
@@ -8,7 +8,10 @@
  */
 
 #include "command.hpp"
+#include "detail/command/occupancy.hpp"
+#include "detail/command/checksum.hpp"
 #include "detail/command/frame.hpp"
+#include "detail/command/writer.hpp"
 
 namespace zcsevcik {
 namespace libfatek {
@@ -19,7 +22,7 @@ static int
 dump_internal(char* buffer, int bufsize, T const& cmd, Args&&... args) noexcept
 {
     using namespace detail;
-    count_bytes size{};
+    occupancy size{};
     checksum LRC{buffer};
 
     const int length = size(STX{}) + size(cmd.station_no())

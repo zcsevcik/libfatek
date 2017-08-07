@@ -7,4 +7,4 @@
  * This file is part of zcsevcik/libfatek.
  */
 
-#include "detail/command/dump.inl"
+#include "detail/command/dump.hpp"
