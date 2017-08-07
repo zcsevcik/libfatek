@@ -24,8 +24,10 @@ address.o: address.cpp address.hpp detail/address/alignment.hpp detail/address/b
            detail/address/dispatcher.hpp detail/address/dumper.hpp detail/address/limits.hpp \
 		   detail/address/parser.hpp detail/address/lexer.inl
 
-command.o: command.cpp command.hpp detail/command/dump.inl \
-           detail/command/frame.hpp detail/command/checksum.hpp
+command.o: command.cpp command.hpp detail/command/dump.hpp \
+           detail/command/frame.hpp detail/command/checksum.hpp \
+           detail/command/occupancy.hpp detail/command/reader.hpp \
+           detail/command/writer.hpp
 
 detail/address/lexer.inl: detail/address/lexer.inl.re2c
 	re2c -g -o $@ $<
