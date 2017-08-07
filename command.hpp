@@ -98,8 +98,8 @@ protected:
 public:
     command(command const&) = default;
     command& operator=(command const&) = default;
-    command(command &&) = default;
-    command& operator=(command &&) = default;
+    command(command &&) noexcept = default;
+    command& operator=(command &&) noexcept = default;
     virtual ~command() = default;
 public:
     virtual int dump(char* buffer, int size) const noexcept = 0;
@@ -127,8 +127,8 @@ class loop_back_testing final : public command, public response
     PROPERTY(data, std::string, std::string())
 
 public:
-    virtual int dump(char* buffer, int size) const noexcept override;
-    virtual int load(char const*, int) noexcept override { return -1; }
+    int dump(char* buffer, int size) const noexcept final;
+    int load(char const*, int) noexcept final { return -1; }
 };
 
 /* ======================================================================= */
@@ -138,7 +138,7 @@ class read_the_system_status_of_PLC final : public command
     PROPERTY(station_no, station, station(1))
 
 public:
-    virtual int dump(char* buffer, int size) const noexcept override;
+    int dump(char* buffer, int size) const noexcept final;
 };
 
 /* ======================================================================= */
@@ -148,7 +148,7 @@ class read_the_detailed_system_status_of_PLC final : public command
     PROPERTY(station_no, station, station(1))
 
 public:
-    virtual int dump(char* buffer, int size) const noexcept override;
+    int dump(char* buffer, int size) const noexcept final;
 };
 
 /* ======================================================================= */
@@ -162,7 +162,7 @@ public:
     PROPERTY(control_code, enum control_code_t, RUN)
 
 public:
-    virtual int dump(char* buffer, int size) const noexcept override;
+    int dump(char* buffer, int size) const noexcept final;
 };
 
 /* ======================================================================= */
@@ -178,7 +178,7 @@ public:
     PROPERTY(running_code, enum running_code_t, ENABLE)
 
 public:
-    virtual int dump(char* buffer, int size) const noexcept override;
+    int dump(char* buffer, int size) const noexcept final;
 };
 
 /* ======================================================================= */
@@ -190,7 +190,7 @@ class the_status_reading_of_ENABLE_DISABLE_of_continuous_discrete final : public
     PROPERTY(addresses_count, int, 1)   // 1<=N<=256
 
 public:
-    virtual int dump(char* buffer, int size) const noexcept override;
+    int dump(char* buffer, int size) const noexcept final;
 };
 
 /* ======================================================================= */
@@ -202,7 +202,7 @@ class read_the_data_from_continuous_registers final : public command
     PROPERTY(addresses_count, int, 1)   // 1<=N<=256
 
 public:
-    virtual int dump(char* buffer, int size) const noexcept override;
+    int dump(char* buffer, int size) const noexcept final;
 };
 
 /* ======================================================================= */
@@ -214,7 +214,7 @@ class the_status_reading_of_continuous_discrete final : public command
     PROPERTY(addresses_count, int, 1)   // 1<=N<=256
 
 public:
-    virtual int dump(char* buffer, int size) const noexcept override;
+    int dump(char* buffer, int size) const noexcept final;
 };
 
 
